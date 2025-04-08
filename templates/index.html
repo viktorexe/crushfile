@@ -1,0 +1,64 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Compressor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="compression-card">
+            <h1>File Compressor</h1>
+            <div class="upload-area" id="dropZone">
+                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="17 8 12 3 7 8"/>
+                    <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                <p>Drop your file here or <span class="browse-text">browse</span></p>
+                <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.gif,.webp,.pdf" hidden>
+            </div>
+
+            <div class="file-info" id="fileInfo" style="display: none;">
+                <div class="file-name" id="fileName"></div>
+                <div class="file-size" id="fileSize"></div>
+            </div>
+
+            <div class="compression-controls">
+                <div class="size-input-container">
+                    <label for="targetSize">Target Size (KB)</label>
+                    <div class="size-input-wrapper">
+                        <input type="number" 
+                            id="targetSize" 
+                            min="1" 
+                            max="10000" 
+                            value="100" 
+                            class="size-input">
+                        <span class="size-unit">KB</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="progress-container" id="progressContainer" style="display: none;">
+                <div class="progress-bar">
+                    <div class="progress" id="progress"></div>
+                </div>
+                <div class="progress-text" id="progressText">Processing...</div>
+            </div>
+
+            <button class="compress-btn" id="compressBtn" disabled>
+                <span class="btn-text">Compress File</span>
+                <div class="loading-spinner"></div>
+            </button>
+        </div>
+        
+        <footer>
+            Made with <span class="heart">❤️</span> by Vansh Sharma
+        </footer>
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+2025-04-08 20:39:53,712 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-08 20:39:53,712 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-08 20:39:53,727 - INFO -  * Restarting with watchdog (windowsapi)
+2025-04-08 20:39:54,547 - WARNING -  * Debugger is active!
+2025-04-08 20:39:54,547 - INFO -  * Debugger PIN: 957-053-038
+2025-04-08 20:39:56,324 - INFO - 127.0.0.1 - - [08/Apr/2025 20:39:56] "GET / HTTP/1.1" 200 -
+2025-04-08 20:39:56,608 - INFO - 127.0.0.1 - - [08/Apr/2025 20:39:56] "GET /static/css/styles.css HTTP/1.1" 200 -
+2025-04-08 20:39:56,641 - INFO - 127.0.0.1 - - [08/Apr/2025 20:39:56] "GET /static/js/script.js HTTP/1.1" 200 -
+2025-04-08 20:39:56,811 - INFO - 127.0.0.1 - - [08/Apr/2025 20:39:56] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-08 20:42:32,513 - INFO - Successfully compressed Blue_and_White_Tech_Futuristic_Desktop_Wallpaper.png: Compressed to 0KB (Quality: 70%)
+2025-04-08 20:42:32,518 - INFO - 127.0.0.1 - - [08/Apr/2025 20:42:32] "POST /api/compress HTTP/1.1" 200 -
+2025-04-08 20:42:49,823 - INFO - Successfully compressed Blue_and_White_Tech_Futuristic_Desktop_Wallpaper.png: Compressed to 0KB (Quality: 37%)
+2025-04-08 20:42:49,823 - INFO - 127.0.0.1 - - [08/Apr/2025 20:42:49] "POST /api/compress HTTP/1.1" 200 -
