@@ -12,3 +12,6 @@
 2025-04-08 20:42:32,518 - INFO - 127.0.0.1 - - [08/Apr/2025 20:42:32] "POST /api/compress HTTP/1.1" 200 -
 2025-04-08 20:42:49,823 - INFO - Successfully compressed Blue_and_White_Tech_Futuristic_Desktop_Wallpaper.png: Compressed to 0KB (Quality: 37%)
 2025-04-08 20:42:49,823 - INFO - 127.0.0.1 - - [08/Apr/2025 20:42:49] "POST /api/compress HTTP/1.1" 200 -
+2025-04-08 20:44:53,021 - INFO -  * Detected change in 'c:\\Users\\sharm\\OneDrive\\Desktop\\File Compressor\\app.py', reloading
+2025-04-08 20:44:53,025 - INFO -  * Detected change in 'c:\\Users\\sharm\\OneDrive\\Desktop\\File Compressor\\app.py', reloading
+2025-04-08 20:44:53,708 - INFO -  * Restarting with watchdog (windowsapi)

@@ -1,4 +1,4 @@
-# app.py
+# Add these imports at the top
 from flask import Flask, request, send_file, render_template, jsonify
 import os
 from werkzeug.utils import secure_filename
@@ -12,12 +12,11 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-# Configure logging
+# Configure logging to work with Vercel
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('app.log'),
         logging.StreamHandler(sys.stdout)
     ]
 )
