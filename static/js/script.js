@@ -143,3 +143,76 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 });
+// Add these variables at the top
+let uploadAnimation = document.getElementById('uploadAnimation');
+let uploadStatus = document.getElementById('uploadStatus');
+let uploadProgress = document.getElementById('uploadProgress');
+
+// Update handleFiles function
+function handleFiles(files) {
+    if (files.length === 0) return;
+    
+    const file = files[0];
+    const maxSize = 100 * 1024 * 1024; // 100MB
+    
+    if (file.size > maxSize) {
+        alert('File size exceeds 100MB limit');
+        return;
+    }
+    
+    showFileInfo(file);
+    compressButton.disabled = false;
+}
+
+// Update compress button click handler
+compressButton.addEventListener('click', async () => {
+    try {
+        const file = fileInput.files[0];
+        const targetSize = parseInt(targetSizeInput.value);
+        
+        if (!file || targetSize < 1) return;
+        
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('targetSize', targetSize);
+        
+        uploadAnimation.style.display = 'block';
+        uploadStatus.textContent = 'Uploading...';
+        
+        const response = await fetch('/api/compress', {
+            method: 'POST',
+            body: formData,
+            onUploadProgress: (progressEvent) => {
+                const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                uploadProgress.textContent = `${percentCompleted}%`;
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        uploadStatus.textContent = 'Processing...';
+        
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `compressed_${file.name}`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        
+        uploadStatus.textContent = 'Complete!';
+        setTimeout(() => {
+            uploadAnimation.style.display = 'none';
+        }, 1000);
+        
+    } catch (error) {
+        console.error('Error:', error);
+        uploadStatus.textContent = 'Error: ' + error.message;
+        uploadProgress.style.color = 'red';
+    }
+});

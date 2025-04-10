@@ -21,13 +21,15 @@ logging.basicConfig(
     ]
 )
 
-# Increase maximum content length to 16MB
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-
 ALLOWED_EXTENSIONS = {
     'image': {'png', 'jpg', 'jpeg', 'gif', 'webp'},
-    'document': {'pdf'}
+    'document': {'pdf'},
+    'video': {'mp4', 'mov', 'avi', 'mkv'}
 }
+
+# Update max content length to 100MB
+app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024
+
 
 def allowed_file(filename):
     """Check if the file extension is allowed."""
@@ -180,6 +182,56 @@ def compress_pdf(pdf_file, target_size_kb):
         logging.error(f"PDF compression error: {str(e)}")
         return None, False, f"PDF compression failed: {str(e)}"
 
+def compress_video(video_file, target_size_kb):
+    """
+    Compress video using FFmpeg
+    Returns: (compressed_file, success, message)
+    """
+    try:
+        import ffmpeg
+        import tempfile
+        import os
+        
+        # Create temporary files
+        temp_input = tempfile.NamedTemporaryFile(delete=False, suffix='.mp4')
+        temp_output = tempfile.NamedTemporaryFile(delete=False, suffix='.mp4')
+        
+        # Save uploaded file
+        video_file.save(temp_input.name)
+        
+        # Get video information
+        probe = ffmpeg.probe(temp_input.name)
+        duration = float(probe['format']['duration'])
+        target_bitrate = (target_size_kb * 8192) / duration  # Convert to bits/second
+        
+        # Compress video
+        stream = ffmpeg.input(temp_input.name)
+        stream = ffmpeg.output(stream, temp_output.name,
+                             video_bitrate=f"{target_bitrate}",
+                             acodec='aac',
+                             vcodec='libx264',
+                             preset='faster')  # Use 'faster' for better speed
+        
+        ffmpeg.run(stream, overwrite_output=True, capture_stdout=True, capture_stderr=True)
+        
+        # Read compressed file
+        with open(temp_output.name, 'rb') as f:
+            compressed = io.BytesIO(f.read())
+        
+        # Cleanup
+        os.unlink(temp_input.name)
+        os.unlink(temp_output.name)
+        
+        compressed.seek(0)
+        actual_size = compressed.getbuffer().nbytes / 1024  # Size in KB
+        
+        return compressed, True, f"Compressed to {int(actual_size)}KB"
+        
+    except Exception as e:
+        logging.error(f"Video compression error: {str(e)}")
+        return None, False, f"Video compression failed: {str(e)}"
+
+
 @app.route('/')
 def index():
     """Render the main page."""
@@ -213,13 +265,15 @@ def compress_file():
         filename = secure_filename(file.filename)
         file_type = get_file_type(filename)
         
+        
         if file_type == 'image':
             compressed, success, message = compress_image(file, target_size)
         elif file_type == 'document':
             compressed, success, message = compress_pdf(file, target_size)
+        elif file_type == 'video':
+            compressed, success, message = compress_video(file, target_size)
         else:
             return jsonify({'error': 'Unsupported file type'}), 400
-        
         if not success or compressed is None:
             return jsonify({'error': message}), 400
         
